@@ -129,7 +129,7 @@ class Robot:
     def updateGameScoreAndTimes(self):
 
         if self.robot.getTime() - self.lastRequestTime > 1: #Defino acá cada cuánto quiero que me actualice los datos
-            auxGameScore, auxTimeRemaining, auxRealTimeRemaining = self.comm.getGameScoreAndtimeRemaining()
+            auxGameScore, auxTimeRemaining, auxRealTimeRemaining = self.comm.get_game_score_and_time_remaining()
             if auxGameScore is not None:
                 self.gameScore = auxGameScore
                 self.timeRemaining = auxTimeRemaining

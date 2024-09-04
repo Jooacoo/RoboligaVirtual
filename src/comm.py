@@ -11,8 +11,7 @@ class Comm:
         mensaje = struct.pack("i i c", pos1, pos2, let) 
         self.emitter.send(mensaje)
 
-    def getGameScoreAndtimeRemaining(self):
-
+    def get_game_score_and_time_remaining(self):
         message = struct.pack('c', 'G'.encode()) # message = 'G' for game information
         self.emitter.send(message) # send message
         gs=None
