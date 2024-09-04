@@ -6,7 +6,7 @@ class Comm:
         self.receiver = receiver
         self.robot=robot
 
-    def sendToken(self, pos1, pos2, letra):
+    def send_token(self, pos1, pos2, letra):
         let = bytes(letra, 'utf-8')  
         mensaje = struct.pack("i i c", pos1, pos2, let) 
         self.emitter.send(mensaje)

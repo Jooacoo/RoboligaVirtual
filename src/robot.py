@@ -148,7 +148,7 @@ class Robot:
     def enviarMensajeVoC(self, entrada):
         self.parar()
         self.delay(1500)
-        self.comm.sendToken(int(self.position.x * 100), int(self.position.y * 100), entrada)
+        self.comm.send_token(int(self.position.x * 100), int(self.position.y * 100), entrada)
         self.delay(100)
 
     def convertir_camara(self, img, alto, ancho):  
