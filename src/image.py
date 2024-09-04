@@ -6,7 +6,7 @@ from point import Point
 from datetime import datetime
 
 
-class ImageProcessor:
+class image_processor:
     def __init__(self):
         self.img = None
         self.salida = None

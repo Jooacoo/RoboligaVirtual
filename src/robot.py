@@ -1,6 +1,6 @@
 from controller import Robot as WebotsRobot # type: ignore
 from map import Map, Tile, TileType
-from image import ImageProcessor
+from image import image_processor
 from point import Point
 from piso import Piso
 from lidar import Lidar
@@ -47,7 +47,7 @@ class Robot:
         self.camD = self.robot.getDevice("camaraDerecha")
         self.camD.enable(TIME_STEP)
 
-        self.imageProcessor = ImageProcessor()
+        self.image_processor = image_processor()
     
         self.position = None
         self.lastPosition=None
@@ -59,8 +59,8 @@ class Robot:
 
         self.navigator = Navigator(self)
         self.lastZ = None
-        # self.holeIZ = self.imageProcessor.see_hole()
-        # self.holeDER = self.imageProcessor.see_hole()
+        # self.holeIZ = self.image_processor.see_hole()
+        # self.holeDER = self.image_processor.see_hole()
         self.wheelL.setVelocity(0)
         self.wheelR.setVelocity(0)
         self.map = None
@@ -283,13 +283,13 @@ class Robot:
         
 
         if self.lidar.hayAlgoIzquierda():
-            entrada_I = self.imageProcessor.procesar(self.convertir_camara(self.camI.getImage(), 64, 64), self.position, self.rotation, "L"	)
+            entrada_I = self.image_processor.procesar(self.convertir_camara(self.camI.getImage(), 64, 64), self.position, self.rotation, "L"	)
             if entrada_I is not None:
                 self.mappingVictim2("L", entrada_I)
                 self.enviarMensajeVoC(entrada_I)
         
         if self.lidar.hayAlgoDerecha():
-            entrada_D = self.imageProcessor.procesar(self.convertir_camara(self.camD.getImage(), 64, 64), self.position, self.rotation, "R")
+            entrada_D = self.image_processor.procesar(self.convertir_camara(self.camD.getImage(), 64, 64), self.position, self.rotation, "R")
             if entrada_D is not None:
                 self.mappingVictim2("R", entrada_D)
                 self.enviarMensajeVoC(entrada_D)
@@ -458,19 +458,19 @@ class Robot:
         orientation = self.obtener_orientacion(self.rotation)
         if orientation == 'N':
             if self.isOpenWest():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
             return False
         elif orientation == 'E':
             if self.isOpenNorth():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
             return False
         elif orientation == 'S':
             if self.isOpenEast():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
             return False
         elif orientation == 'W':
             if self.isOpenSouth():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camI.getImage(), 64, 64))
             return False   
 
     def bh_der(self):
@@ -478,19 +478,19 @@ class Robot:
         orientation = self.obtener_orientacion(self.rotation)
         if orientation == 'N':
             if self.isOpenEast():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
             return False
         elif orientation == 'E':
             if self.isOpenSouth():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
             return False
         elif orientation == 'S':
             if self.isOpenWest():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
             return False
         elif orientation == 'W':
             if self.isOpenNorth():
-                return self.imageProcessor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
+                return self.image_processor.see_hole(self.convertir_camara(self.camD.getImage(), 64, 64))
             return False
 
     def parar(self):
