@@ -22,14 +22,14 @@ while robot.step() != -1:
     navigator = robot.getNavigator()
     point, shouldBrake = navigator.whereToGo()
 
-    sendMapNow = robot.position.distance_to(point) < 0.025
+    send_mapNow = robot.position.distance_to(point) < 0.025
     
-    if not sendMapNow:
+    if not send_mapNow:
         robot.moveToPoint(point, shouldBrake)
     
-    if sendMapNow or robot.timeRemaining < 10 or robot.realTimeRemaining < 10:
+    if send_mapNow or robot.timeRemaining < 10 or robot.realTimeRemaining < 10:
         rep=robot.map.getRepresentation()
-        robot.comm.sendMap(rep)
+        robot.comm.send_map(rep)
         # print(rep)
         robot.comm.sendExit()
     

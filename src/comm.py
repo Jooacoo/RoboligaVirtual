@@ -37,7 +37,7 @@ class Comm:
             
         return gs, tr, rtr
 
-    def sendMap(self, rep):
+    def send_map(self, rep):
      ## Get shape
         s = rep.shape
         ## Get shape as bytes
