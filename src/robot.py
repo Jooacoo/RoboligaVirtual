@@ -695,4 +695,4 @@ class Robot:
     def exit(self, rep):
        
         self.comm.send_map(rep)
-        self.comm.sendExit()
+        self.comm.send_exit()

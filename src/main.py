@@ -31,7 +31,7 @@ while robot.step() != -1:
         rep=robot.map.getRepresentation()
         robot.comm.send_map(rep)
         # print(rep)
-        robot.comm.sendExit()
+        robot.comm.send_exit()
     
     # # for tiles in robot.map.getValidTiles():
     #     print(tiles)

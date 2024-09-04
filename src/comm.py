@@ -58,7 +58,7 @@ class Comm:
         map_evaluate_request = struct.pack('c', b'M')
         self.emitter.send(map_evaluate_request)
     
-    def sendExit(self):
+    def send_exit(self):
         ## Exit message
         exit_mes = struct.pack('c', b'E')
         self.emitter.send(exit_mes)
