@@ -138,38 +138,38 @@ class image_processor:
                         return None
  
                     
-                    pixeles_negros = np.count_nonzero(rect == 0)
-                    if pixeles_negros == 0: 
+                    black_pixels = np.count_nonzero(rect == 0)
+                    if black_pixels == 0: 
                         # print("CHAU porque no hay pixeles negros")
                         return None
                     
-                    porcentaje_negros = pixeles_negros / size
-                    if porcentaje_negros < 0.1:
+                    black_percentaje = black_pixels / size
+                    if black_percentaje < 0.1:
                         # print("CHAU porque hay muy pocos porcentaje de negros")
                         return None
                     
                     
-                    cuadritoArriba = thresh[y - half_height:y - int(half_height / 3), x - int(half_width / 3):x + int(half_width / 3)]
-                    cuadritoAbajo = thresh[y + int(half_height / 3):y + half_height, x - int(half_width / 3):x + int(half_width / 3)]
+                    top_square = thresh[y - half_height:y - int(half_height / 3), x - int(half_width / 3):x + int(half_width / 3)]
+                    bottom_square = thresh[y + int(half_height / 3):y + half_height, x - int(half_width / 3):x + int(half_width / 3)]
                     top_central = y - int(half_height / 3)
                     bottom_central = y + int(half_height / 3)
                     left_central = x - int(half_width / 3)
                     right_central = x + int(half_width / 3)
-                    cuadritoCentral = thresh[top_central:bottom_central, left_central:right_central]
-                    pixeles_negros_central = np.count_nonzero(cuadritoCentral == 0)
-                    pixeles_negros_arriba = np.count_nonzero(cuadritoArriba == 0)
-                    pixeles_negros_abajo = np.count_nonzero(cuadritoAbajo == 0)
+                    central_square = thresh[top_central:bottom_central, left_central:right_central]
+                    black_pixels_central = np.count_nonzero(central_square == 0)
+                    black_pixels_top = np.count_nonzero(top_square == 0)
+                    black_pixels_bottom = np.count_nonzero(bottom_square == 0)
 
-                    if pixeles_negros_abajo <= 3 and pixeles_negros_arriba <= 6 and pixeles_negros_central >= 30: #ACAACA decía 35 lo relajamos
+                    if black_pixels_bottom <= 3 and black_pixels_top <= 6 and black_pixels_central >= 30: #ACAACA decía 35 lo relajamos
                         self.exit = 'H'
-                    elif pixeles_negros_abajo >= 13 and pixeles_negros_arriba >= 13:
+                    elif black_pixels_bottom >= 13 and black_pixels_top >= 13:
                         self.exit = 'S'
-                    elif pixeles_negros_abajo >= 15 and pixeles_negros_arriba <= 8: #ACAACA Antes decía 5, lo relajamos
+                    elif black_pixels_bottom >= 15 and black_pixels_top <= 8: #ACAACA Antes decía 5, lo relajamos
                         self.exit = 'U'
-                    elif pixeles_negros_abajo >= 1 and pixeles_negros_arriba >= 1:
+                    elif black_pixels_bottom >= 1 and black_pixels_top >= 1:
                         return self.exit
                     # print("Pixeles")
-                    # print(pixeles_negros_arriba, pixeles_negros_central, pixeles_negros_abajo)
+                    # print(black_pixels_top, black_pixels_central, black_pixels_bottom)
                     # print(self.exit)
                     # # Descomentar para ver si hay falsos positivos
                     # self.debug_show(self.img)
@@ -312,9 +312,9 @@ class image_processor:
         grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         mitad = grey[43:, :]
         size = mitad.shape[0] * mitad.shape[1]
-        pixeles_negros = np.count_nonzero(mitad < 31)
-        porcentaje_negros = pixeles_negros / size
+        black_pixels = np.count_nonzero(mitad < 31)
+        black_percentaje = black_pixels / size
         black_Hole = False
-        if porcentaje_negros >=0.85 and porcentaje_negros <= 0.97:
+        if black_percentaje >=0.85 and black_percentaje <= 0.97:
             black_Hole = True
         return black_Hole
