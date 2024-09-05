@@ -155,7 +155,7 @@ class Robot:
             img_a_convertir = np.array(np.frombuffer(img, np.uint8).reshape((height, width, 4)))
             return img_a_convertir
     
-    def mappingVictim2(self, side, token): # side = "L" o "R" token = cartelito o víctima
+    def mappingVictim2(self, side, token): # side = "L" o "R" token = signito o víctima
         # obtener la distancia del rayito 128 si es la L o 384 si es la R. Para calcular targetPoint, si es L, la rotación del 
         # robot + pi/2, si es R, la rotación del robot - pi/2
         if side == "L":
@@ -164,7 +164,7 @@ class Robot:
         else:
             dist = self.lidar.rangeImage[384]
             rot=self.rotation-math.pi/2
-        # usando targetPoint, obtener el punto de la pared donde estaría el cartel.
+        # usando targetPoint, obtener el punto de la pared donde estaría el sign.
         targetPoint=utils.targetPoint(self.position, rot, dist)
         # pedirle a map que me de el tile en esa posición
         tileToTag=self.map.getTileAtPosition(targetPoint)
@@ -172,7 +172,7 @@ class Robot:
         # agregar en tile un método que dado un punto, me diga qué pared es (NL, NC, NR, SL, SC, SR, EU, EC, ED, WU, WC, WD, IN, IS, IE, IW)
         tileToTag.setTokenOnAWall(targetPoint, token)
     
-    def mappingVictim(self, side, token): # side = "L" o "R" token = cartelito o víctima
+    def mappingVictim(self, side, token): # side = "L" o "R" token = signito o víctima
         #TODO: falla en el mapeo cuando detecta una víctima estando en diagonal
         # self.mappingVictim2(side, token)
         umbralPared=0.01
@@ -283,13 +283,13 @@ class Robot:
         
 
         if self.lidar.hayAlgoIzquierda():
-            entrada_I = self.image_processor.procesar(self.convertir_camara(self.camI.getImage(), 64, 64), self.position, self.rotation, "L"	)
+            entrada_I = self.image_processor.process(self.convertir_camara(self.camI.getImage(), 64, 64), self.position, self.rotation, "L"	)
             if entrada_I is not None:
                 self.mappingVictim2("L", entrada_I)
                 self.enviarMensajeVoC(entrada_I)
         
         if self.lidar.hayAlgoDerecha():
-            entrada_D = self.image_processor.procesar(self.convertir_camara(self.camD.getImage(), 64, 64), self.position, self.rotation, "R")
+            entrada_D = self.image_processor.process(self.convertir_camara(self.camD.getImage(), 64, 64), self.position, self.rotation, "R")
             if entrada_D is not None:
                 self.mappingVictim2("R", entrada_D)
                 self.enviarMensajeVoC(entrada_D)

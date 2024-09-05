@@ -19,7 +19,7 @@ class image_processor:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-#    def es_victima(self):
+#    def es_victim(self):
 #        if self.img is None or self.img.size == 0:
 #            return None
 #        
@@ -29,9 +29,9 @@ class image_processor:
 #
 #        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
     
-#    def devolver_letra_victimas(self):
+#    def devolver_letra_victims(self):
 #        self.exit = None
-#        crop=0 # Este crop lo vamos a utilizar cuando realizamos una transformación del cartel deformado
+#        crop=0 # Este crop lo vamos a utilizar cuando realizamos una transformación del sign deformado
         # para sacarle algunos bordes negritos que nos quedan
 
         
@@ -45,7 +45,7 @@ class image_processor:
 
         if len(contours) == 1:
             if len(contours[0]) > 10:
-                # print("Encontré un cartel que parece una letra pero tiene demasiados puntos su contorno")
+                # print("Encontré un sign que parece una letra pero tiene demasiados puntos su contorno")
 
                 # ¿Tiene thresh una cantidad de pixeles whites razonables?
                 # pixeles_whites = np.count_nonzero(thresh == 255)
@@ -75,7 +75,7 @@ class image_processor:
                     min_y = min(ori_points[:,0,1])
                     # get the max value of y in ori_points
                     max_y = max(ori_points[:,0,1])
-                    #Vamos a tratar de que el cartel quede cuadrado en la transformación
+                    #Vamos a tratar de que el sign quede cuadrado en la transformación
                     # Me fijo si lo agrando de width o de height
                     difx = max_x - min_x
                     dify = max_y - min_y
@@ -116,7 +116,7 @@ class image_processor:
                 approx = cv2.minAreaRect(contours[0])
                 angle = approx[2]
                 if angle % 90 == 0:
-                    # print("Encontré un cartel que parece una letra")
+                    # print("Encontré un sign que parece una letra")
                     x = int(approx[0][0])
                     y = int(approx[0][1])                
                     if x < 26 or x > 38:
@@ -277,7 +277,7 @@ class image_processor:
                 self.exit = 'O'
             return self.exit
         
-    def procesar(self, converted_img, lastPosition, lastRotation, camera):
+    def process(self, converted_img, lastPosition, lastRotation, camera):
         # if converted_img is None or converted_img.size == 0:
         #     return None
         # # si es la misma cámara, se movió y rotó poquito: None!!
@@ -285,20 +285,20 @@ class image_processor:
         if camera == self.last_camera and lastPosition.distance_to(self.last_token_position) < 0.015 and utils.normalizacion_radianes(self.last_token_rotation - lastRotation) < math.pi/8:
             # print('no analizo', lastPosition.distance_to(self.last_token_position))
             return None
-        # si no, antes de procesar, guardamos la última, cámara, 
+        # si no, antes de process, guardamos la última, cámara, 
         # #posición y rotación, luego procesamos
 
         self.img = converted_img
-        victima = self.devolver_letra_victimas()
-        if victima is not None:
-            # print('letra', victima, lastPosition)
+        victim = self.devolver_letra_victims()
+        if victim is not None:
+            # print('letra', victim, lastPosition)
             self.last_token_position = lastPosition
             self.last_token_rotation = lastRotation
             self.last_camera = camera
-            return victima
+            return victim
         else:
-            cartel = self.recognize_clean_sign()
-            if cartel is not None:
+            sign = self.recognize_clean_sign()
+            if sign is not None:
                 exit = self.return_sign_text()
                 if exit is not None:
                     # print('exit', exit, lastPosition)

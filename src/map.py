@@ -294,7 +294,7 @@ class Tile:
 
     def getRepresentation(self):
         # create a numpy array 5x5
-        # Agregar en la tile las víctimas y carteles 
+        # Agregar en la tile las víctimas y signes 
         # Agregar paredes internas
   
         # si es area 4, hacer todos * y retornarlo
@@ -385,7 +385,7 @@ class Tile:
         if not(self.type==TileType.STANDARD or self.type==None):
             rep[1, 1]=rep[1, 3]=rep[3, 1]=rep[3, 3]=self.type.value
 
-        # DONE: Agregar las víctimas y carteles
+        # DONE: Agregar las víctimas y signes
         if self.tokensNorth != [0, 0, 0]:
             if self.tokensNorth[0] != 0:
                 rep[0, 1] = self.tokensNorth[0]
@@ -418,7 +418,7 @@ class Tile:
             if self.tokensEast[2] != 0:
                 rep[3, 4] = self.tokensEast[2]
         
-        #TODO: Agregar vícitmas y carteles internos
+        #TODO: Agregar vícitmas y signes internos
         if not(self.tokensVerticalInternalWall[0]==0):
             rep[1,2]=self.tokensVerticalInternalWall[0]
         if not(self.tokensVerticalInternalWall[1]==0):
