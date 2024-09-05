@@ -240,12 +240,12 @@ class image_processor:
             if x < 26 or x > 38: return None
             if y < 26 or y > 38: return None
 
-            mitadAncho = int(approx[1][0] / 2)
-            mitadAlto = int(approx[1][1] / 2)
+            half_width = int(approx[1][0] / 2)
+            half_height = int(approx[1][1] / 2)
             
-            if y - mitadAlto < 0 or y + mitadAlto > imagen_rot.shape[0] or x - mitadAncho < 0 or x + mitadAncho > imagen_rot.shape[1]:
+            if y - half_height < 0 or y + half_height > imagen_rot.shape[0] or x - half_width < 0 or x + half_width > imagen_rot.shape[1]:
                 return None
-            rect = imagen_rot[y - mitadAlto:y + mitadAlto, x - mitadAncho:x + mitadAncho]
+            rect = imagen_rot[y - half_height:y + half_height, x - half_width:x + half_width]
             
             size = rect.shape[0] * rect.shape[1]
             if size == 0: return None
