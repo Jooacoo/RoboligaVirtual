@@ -177,7 +177,7 @@ class image_processor:
                     # self.debug_show(rect)
             return self.exit
         
-    def reconocer_limpiar_cartel(self):
+    def recognize_clean_sign(self):
         if self.img is None or self.img.size == 0:
             return None
         
@@ -297,7 +297,7 @@ class image_processor:
             self.last_camera = camera
             return victima
         else:
-            cartel = self.reconocer_limpiar_cartel()
+            cartel = self.recognize_clean_sign()
             if cartel is not None:
                 exit = self.devolver_letra_carteles()
                 if exit is not None:
