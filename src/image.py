@@ -47,13 +47,13 @@ class image_processor:
             if len(contours[0]) > 10:
                 # print("Encontré un cartel que parece una letra pero tiene demasiados puntos su contorno")
 
-                # ¿Tiene thresh una cantidad de pixeles blancos razonables?
-                # pixeles_blancos = np.count_nonzero(thresh == 255)
+                # ¿Tiene thresh una cantidad de pixeles whites razonables?
+                # pixeles_whites = np.count_nonzero(thresh == 255)
                 # size = thresh.shape[0] * thresh.shape[1]
-                # porcentaje_blancos = pixeles_blancos / size
+                # porcentaje_whites = pixeles_whites / size
                 # print("Porcentajes")
-                # print(pixeles_blancos, size, porcentaje_blancos)
-                # if porcentaje_blancos < 0.05: #Si tengo pocos blancos me voy
+                # print(pixeles_whites, size, porcentaje_whites)
+                # if porcentaje_whites < 0.05: #Si tengo pocos whites me voy
                 #     return None
                 
 
@@ -104,7 +104,7 @@ class image_processor:
 
 
                     # print("Quedó de ", len(contours), len(contours[0]))
-                    crop=2 # cantidad de pixels que recorto de cada lado para sacar bordes negros
+                    crop=2 # cantidad de pixels que recorto de cada lado para sacar bordes blacks
                     # print("MinXPoint: ",minXPoint)
                     # print("MaxXPoint: ",maxXPoint)
             else:
@@ -140,12 +140,12 @@ class image_processor:
                     
                     black_pixels = np.count_nonzero(rect == 0)
                     if black_pixels == 0: 
-                        # print("CHAU porque no hay pixeles negros")
+                        # print("CHAU porque no hay pixeles blacks")
                         return None
                     
                     black_percentaje = black_pixels / size
                     if black_percentaje < 0.1:
-                        # print("CHAU porque hay muy pocos porcentaje de negros")
+                        # print("CHAU porque hay muy pocos porcentaje de blacks")
                         return None
                     
                     
@@ -254,26 +254,26 @@ class image_processor:
                 #print("CHAU porque no es un cuadrado")
                 return None
 
-            amarillo, rojo, negro, blanco = 0, 0, 0, 0
+            yellow, red, black, white = 0, 0, 0, 0
             for x in range(rect.shape[0]):
                 for y in range(rect.shape[1]):
                     pixel = rect[x, y]
                     b, g, r = pixel[:3]
                     if b > 200 and g > 200 and r > 200:
-                        blanco += 1
+                        white += 1
                     elif b <= 1 and g <= 1 and r <= 1:
-                        negro += 1
+                        black += 1
                     elif b > 70 and g < 5 and r > 190:
-                        rojo += 1
+                        red += 1
                     elif b < 10 and g > 190 and r > 195:
-                        amarillo += 1
-            if rojo > 0 and rojo > blanco and rojo > negro and rojo > amarillo and blanco == 0 and negro == 0 and amarillo == 0:
+                        yellow += 1
+            if red > 0 and red > white and red > black and red > yellow and white == 0 and black == 0 and yellow == 0:
                 self.exit = 'F'
-            elif (blanco + negro) > (amarillo + rojo) and blanco > negro:
+            elif (white + black) > (yellow + red) and white > black:
                 self.exit = 'P'
-            elif (blanco + negro) > (amarillo + rojo):
+            elif (white + black) > (yellow + red):
                 self.exit = 'C'
-            elif rojo > 0 and amarillo > 0 and rojo > blanco and rojo > negro and rojo > amarillo and amarillo > blanco and amarillo > negro:
+            elif red > 0 and yellow > 0 and red > white and red > black and red > yellow and yellow > white and yellow > black:
                 self.exit = 'O'
             return self.exit
         
