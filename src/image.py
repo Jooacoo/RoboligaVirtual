@@ -9,12 +9,12 @@ from datetime import datetime
 class image_processor:
     def __init__(self):
         self.img = None
-        self.salida = None
+        self.exit = None
         self.lastTokenPosition = Point(10000, 10000)
         self.lastTokenRotation = 150.8
         self.lastCamera = 'j'
 
-    def debugShow(self, image):
+    def debug_show(self, image):
         cv2.imshow("V", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -30,7 +30,7 @@ class image_processor:
         return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
     
     def devolver_letra_victimas(self):
-        self.salida = None
+        self.exit = None
         recorte=0 # Este recorte lo vamos a utilizar cuando realizamos una transformación del cartel deformado
         # para sacarle algunos bordes negritos que nos quedan
 
@@ -40,7 +40,7 @@ class image_processor:
         paraMostrarDespues=thresh.copy()
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) == 0:
-            return self.salida
+            return self.exit
 
 
         if len(contours) == 1:
@@ -64,7 +64,7 @@ class image_processor:
                 oriPoints = cv2.approxPolyDP(hull, 0.01*cv2.arcLength(hull, True), True)
                 if(len(oriPoints) != 4):
                     # print("No es un cuadrado")
-                    return self.salida
+                    return self.exit
 
                 else:
                     # get the min value of x in oriPoints
@@ -161,21 +161,21 @@ class image_processor:
                     pixeles_negros_abajo = np.count_nonzero(cuadritoAbajo == 0)
 
                     if pixeles_negros_abajo <= 3 and pixeles_negros_arriba <= 6 and pixeles_negros_central >= 30: #ACAACA decía 35 lo relajamos
-                        self.salida = 'H'
+                        self.exit = 'H'
                     elif pixeles_negros_abajo >= 13 and pixeles_negros_arriba >= 13:
-                        self.salida = 'S'
+                        self.exit = 'S'
                     elif pixeles_negros_abajo >= 15 and pixeles_negros_arriba <= 8: #ACAACA Antes decía 5, lo relajamos
-                        self.salida = 'U'
+                        self.exit = 'U'
                     elif pixeles_negros_abajo >= 1 and pixeles_negros_arriba >= 1:
-                        return self.salida
+                        return self.exit
                     # print("Pixeles")
                     # print(pixeles_negros_arriba, pixeles_negros_central, pixeles_negros_abajo)
-                    # print(self.salida)
+                    # print(self.exit)
                     # # Descomentar para ver si hay falsos positivos
-                    # self.debugShow(self.img)
-                    # self.debugShow(paraMostrarDespues)
-                    # self.debugShow(rect)
-            return self.salida
+                    # self.debug_show(self.img)
+                    # self.debug_show(paraMostrarDespues)
+                    # self.debug_show(rect)
+            return self.exit
         
     def reconocer_limpiar_cartel(self):
         if self.img is None or self.img.size == 0:
@@ -211,7 +211,7 @@ class image_processor:
         return None
     
     def devolver_letra_carteles(self):
-        self.salida = None
+        self.exit = None
         gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gris, 120, 255, cv2.THRESH_BINARY)
         contornos, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -268,14 +268,14 @@ class image_processor:
                     elif b < 10 and g > 190 and r > 195:
                         amarillo += 1
             if rojo > 0 and rojo > blanco and rojo > negro and rojo > amarillo and blanco == 0 and negro == 0 and amarillo == 0:
-                self.salida = 'F'
+                self.exit = 'F'
             elif (blanco + negro) > (amarillo + rojo) and blanco > negro:
-                self.salida = 'P'
+                self.exit = 'P'
             elif (blanco + negro) > (amarillo + rojo):
-                self.salida = 'C'
+                self.exit = 'C'
             elif rojo > 0 and amarillo > 0 and rojo > blanco and rojo > negro and rojo > amarillo and amarillo > blanco and amarillo > negro:
-                self.salida = 'O'
-            return self.salida
+                self.exit = 'O'
+            return self.exit
         
     def procesar(self, converted_img, lastPosition, lastRotation, camera):
         # if converted_img is None or converted_img.size == 0:
@@ -299,13 +299,13 @@ class image_processor:
         else:
             cartel = self.reconocer_limpiar_cartel()
             if cartel is not None:
-                salida = self.devolver_letra_carteles()
-                if salida is not None:
-                    # print('salida', salida, lastPosition)
+                exit = self.devolver_letra_carteles()
+                if exit is not None:
+                    # print('exit', exit, lastPosition)
                     self.lastTokenPosition = lastPosition
                     self.lastTokenRotation = lastRotation
                     self.lastCamera = camera
-                return salida
+                return exit
         return None
     
     def see_hole(self, img):

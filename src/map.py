@@ -125,8 +125,8 @@ class Map:
                     f.write("\n")
     
     def getValidTiles(self):
-        salida=[tile for tile in self.tiles.values() if tile.isValid()]
-        return salida
+        exit=[tile for tile in self.tiles.values() if tile.isValid()]
+        return exit
     
     def combineTilesReg(self, tileMapa, tileAUbicar):
         # en cada casilla del mapa que recibe tengo 1, 0, una letra o un *
