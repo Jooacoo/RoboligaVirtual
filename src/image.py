@@ -210,7 +210,7 @@ class image_processor:
             return rect, True
         return None
     
-    def devolver_letra_carteles(self):
+    def return_sign_text(self):
         self.exit = None
         grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(grey, 120, 255, cv2.THRESH_BINARY)
@@ -299,7 +299,7 @@ class image_processor:
         else:
             cartel = self.recognize_clean_sign()
             if cartel is not None:
-                exit = self.devolver_letra_carteles()
+                exit = self.return_sign_text()
                 if exit is not None:
                     # print('exit', exit, lastPosition)
                     self.last_token_position = lastPosition
