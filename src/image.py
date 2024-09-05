@@ -31,7 +31,7 @@ class image_processor:
     
 #    def devolver_letra_victimas(self):
 #        self.exit = None
-#        recorte=0 # Este recorte lo vamos a utilizar cuando realizamos una transformación del cartel deformado
+#        crop=0 # Este crop lo vamos a utilizar cuando realizamos una transformación del cartel deformado
         # para sacarle algunos bordes negritos que nos quedan
 
         
@@ -49,10 +49,10 @@ class image_processor:
 
                 # ¿Tiene thresh una cantidad de pixeles blancos razonables?
                 # pixeles_blancos = np.count_nonzero(thresh == 255)
-                # tamanio = thresh.shape[0] * thresh.shape[1]
-                # porcentaje_blancos = pixeles_blancos / tamanio
+                # size = thresh.shape[0] * thresh.shape[1]
+                # porcentaje_blancos = pixeles_blancos / size
                 # print("Porcentajes")
-                # print(pixeles_blancos, tamanio, porcentaje_blancos)
+                # print(pixeles_blancos, size, porcentaje_blancos)
                 # if porcentaje_blancos < 0.05: #Si tengo pocos blancos me voy
                 #     return None
                 
@@ -104,7 +104,7 @@ class image_processor:
 
 
                     # print("Quedó de ", len(contours), len(contours[0]))
-                    recorte=2 # cantidad de pixels que recorto de cada lado para sacar bordes negros
+                    crop=2 # cantidad de pixels que recorto de cada lado para sacar bordes negros
                     # print("MinXPoint: ",minXPoint)
                     # print("MaxXPoint: ",maxXPoint)
             else:
@@ -125,12 +125,12 @@ class image_processor:
                     if y < 26 or y > 38: 
                         # print("CHAU porque y no está en el rango")
                         return None
-                    mitad_ancho = int(approx[1][0] / 2)-recorte
-                    mitad_alto = int(approx[1][1] / 2)-recorte
+                    half_width = int(approx[1][0] / 2)-crop
+                    half_height = int(approx[1][1] / 2)-crop
                     
-                    rect = thresh[y - mitad_alto:y + mitad_alto, x - mitad_ancho:x + mitad_ancho]
-                    tamanio = rect.shape[0] * rect.shape[1]
-                    if tamanio == 0: 
+                    rect = thresh[y - half_height:y + half_height, x - half_width:x + half_width]
+                    size = rect.shape[0] * rect.shape[1]
+                    if size == 0: 
                         # print("Me dio tamaño 0")
                         return None
                     if abs(rect.shape[0] - rect.shape[1]) > 2:
@@ -143,18 +143,18 @@ class image_processor:
                         # print("CHAU porque no hay pixeles negros")
                         return None
                     
-                    porcentaje_negros = pixeles_negros / tamanio
+                    porcentaje_negros = pixeles_negros / size
                     if porcentaje_negros < 0.1:
                         # print("CHAU porque hay muy pocos porcentaje de negros")
                         return None
                     
                     
-                    cuadritoArriba = thresh[y - mitad_alto:y - int(mitad_alto / 3), x - int(mitad_ancho / 3):x + int(mitad_ancho / 3)]
-                    cuadritoAbajo = thresh[y + int(mitad_alto / 3):y + mitad_alto, x - int(mitad_ancho / 3):x + int(mitad_ancho / 3)]
-                    top_central = y - int(mitad_alto / 3)
-                    bottom_central = y + int(mitad_alto / 3)
-                    left_central = x - int(mitad_ancho / 3)
-                    right_central = x + int(mitad_ancho / 3)
+                    cuadritoArriba = thresh[y - half_height:y - int(half_height / 3), x - int(half_width / 3):x + int(half_width / 3)]
+                    cuadritoAbajo = thresh[y + int(half_height / 3):y + half_height, x - int(half_width / 3):x + int(half_width / 3)]
+                    top_central = y - int(half_height / 3)
+                    bottom_central = y + int(half_height / 3)
+                    left_central = x - int(half_width / 3)
+                    right_central = x + int(half_width / 3)
                     cuadritoCentral = thresh[top_central:bottom_central, left_central:right_central]
                     pixeles_negros_central = np.count_nonzero(cuadritoCentral == 0)
                     pixeles_negros_arriba = np.count_nonzero(cuadritoArriba == 0)
@@ -201,12 +201,12 @@ class image_processor:
             
             x = int(approx[0][0])
             y = int(approx[0][1])
-            mitad_ancho = int(approx[1][0] / 2)
-            mitad_alto = int(approx[1][1] / 2)
+            half_width = int(approx[1][0] / 2)
+            half_height = int(approx[1][1] / 2)
 
-            if y - mitad_alto < 0 or y + mitad_alto > imagen_rot.shape[0] or x - mitad_ancho < 0 or x + mitad_ancho > imagen_rot.shape[1]:
+            if y - half_height < 0 or y + half_height > imagen_rot.shape[0] or x - half_width < 0 or x + half_width > imagen_rot.shape[1]:
                 return None
-            rect = imagen_rot[y - mitad_alto:y + mitad_alto, x - mitad_ancho:x + mitad_ancho]
+            rect = imagen_rot[y - half_height:y + half_height, x - half_width:x + half_width]
             return rect, True
         return None
     
@@ -247,8 +247,8 @@ class image_processor:
                 return None
             rect = imagen_rot[y - mitadAlto:y + mitadAlto, x - mitadAncho:x + mitadAncho]
             
-            tamanio = rect.shape[0] * rect.shape[1]
-            if tamanio == 0: return None
+            size = rect.shape[0] * rect.shape[1]
+            if size == 0: return None
                        
             if abs(rect.shape[0] - rect.shape[1]) > 2:
                 #print("CHAU porque no es un cuadrado")
@@ -311,9 +311,9 @@ class image_processor:
     def see_hole(self, img):
         grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         mitad = grey[43:, :]
-        tamanio = mitad.shape[0] * mitad.shape[1]
+        size = mitad.shape[0] * mitad.shape[1]
         pixeles_negros = np.count_nonzero(mitad < 31)
-        porcentaje_negros = pixeles_negros / tamanio
+        porcentaje_negros = pixeles_negros / size
         black_Hole = False
         if porcentaje_negros >=0.85 and porcentaje_negros <= 0.97:
             black_Hole = True
