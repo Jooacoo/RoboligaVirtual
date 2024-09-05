@@ -10,24 +10,24 @@ class image_processor:
     def __init__(self):
         self.img = None
         self.exit = None
-        self.lastTokenPosition = Point(10000, 10000)
-        self.lastTokenRotation = 150.8
-        self.lastCamera = 'j'
+        self.last_token_position = Point(10000, 10000)
+        self.last_token_rotation = 150.8
+        self.last_camera = 'j'
 
     def debug_show(self, image):
         cv2.imshow("V", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def es_victima(self):
-        if self.img is None or self.img.size == 0:
-            return None
-        
-        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gris, 100, 255, cv2.THRESH_BINARY)
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
+#    def es_victima(self):
+#        if self.img is None or self.img.size == 0:
+#            return None
+#        
+#        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+#        _, thresh = cv2.threshold(gris, 100, 255, cv2.THRESH_BINARY)
+#        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+#
+#        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
     
     def devolver_letra_victimas(self):
         self.exit = None
@@ -281,9 +281,9 @@ class image_processor:
         # if converted_img is None or converted_img.size == 0:
         #     return None
         # # si es la misma cámara, se movió y rotó poquito: None!!
-        # print(utils.normalizacion_radianes(self.lastTokenRotation - lastRotation))
-        if camera == self.lastCamera and lastPosition.distance_to(self.lastTokenPosition) < 0.015 and utils.normalizacion_radianes(self.lastTokenRotation - lastRotation) < math.pi/8:
-            # print('no analizo', lastPosition.distance_to(self.lastTokenPosition))
+        # print(utils.normalizacion_radianes(self.last_token_rotation - lastRotation))
+        if camera == self.last_camera and lastPosition.distance_to(self.last_token_position) < 0.015 and utils.normalizacion_radianes(self.last_token_rotation - lastRotation) < math.pi/8:
+            # print('no analizo', lastPosition.distance_to(self.last_token_position))
             return None
         # si no, antes de procesar, guardamos la última, cámara, 
         # #posición y rotación, luego procesamos
@@ -292,9 +292,9 @@ class image_processor:
         victima = self.devolver_letra_victimas()
         if victima is not None:
             # print('letra', victima, lastPosition)
-            self.lastTokenPosition = lastPosition
-            self.lastTokenRotation = lastRotation
-            self.lastCamera = camera
+            self.last_token_position = lastPosition
+            self.last_token_rotation = lastRotation
+            self.last_camera = camera
             return victima
         else:
             cartel = self.reconocer_limpiar_cartel()
@@ -302,9 +302,9 @@ class image_processor:
                 exit = self.devolver_letra_carteles()
                 if exit is not None:
                     # print('exit', exit, lastPosition)
-                    self.lastTokenPosition = lastPosition
-                    self.lastTokenRotation = lastRotation
-                    self.lastCamera = camera
+                    self.last_token_position = lastPosition
+                    self.last_token_rotation = lastRotation
+                    self.last_camera = camera
                 return exit
         return None
     
