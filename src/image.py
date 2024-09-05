@@ -23,8 +23,8 @@ class image_processor:
 #        if self.img is None or self.img.size == 0:
 #            return None
 #        
-#        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-#        _, thresh = cv2.threshold(gris, 100, 255, cv2.THRESH_BINARY)
+#        grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+#        _, thresh = cv2.threshold(grey, 100, 255, cv2.THRESH_BINARY)
 #        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 #
 #        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
@@ -35,8 +35,8 @@ class image_processor:
         # para sacarle algunos bordes negritos que nos quedan
 
         
-        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gris, 160, 255, cv2.THRESH_BINARY)
+        grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(grey, 160, 255, cv2.THRESH_BINARY)
         paraMostrarDespues=thresh.copy()
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) == 0:
@@ -181,8 +181,8 @@ class image_processor:
         if self.img is None or self.img.size == 0:
             return None
         
-        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gris, 120, 255, cv2.THRESH_BINARY)
+        grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(grey, 120, 255, cv2.THRESH_BINARY)
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) == 0:
             return None
@@ -212,8 +212,8 @@ class image_processor:
     
     def devolver_letra_carteles(self):
         self.exit = None
-        gris = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gris, 120, 255, cv2.THRESH_BINARY)
+        grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(grey, 120, 255, cv2.THRESH_BINARY)
         contornos, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contornos) == 0:
             return None
@@ -309,8 +309,8 @@ class image_processor:
         return None
     
     def see_hole(self, img):
-        gris = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        mitad = gris[43:, :]
+        grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        mitad = grey[43:, :]
         tamanio = mitad.shape[0] * mitad.shape[1]
         pixeles_negros = np.count_nonzero(mitad < 31)
         porcentaje_negros = pixeles_negros / tamanio
