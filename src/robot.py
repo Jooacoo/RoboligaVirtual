@@ -151,8 +151,8 @@ class Robot:
         self.comm.send_token(int(self.position.x * 100), int(self.position.y * 100), entrada)
         self.delay(100)
 
-    def convertir_camara(self, img, alto, ancho):  
-            img_a_convertir = np.array(np.frombuffer(img, np.uint8).reshape((alto, ancho, 4)))
+    def convertir_camara(self, img, height, width):  
+            img_a_convertir = np.array(np.frombuffer(img, np.uint8).reshape((height, width, 4)))
             return img_a_convertir
     
     def mappingVictim2(self, side, token): # side = "L" o "R" token = cartelito o víctima

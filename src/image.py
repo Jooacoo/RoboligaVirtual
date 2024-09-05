@@ -76,7 +76,7 @@ class image_processor:
                     # get the max value of y in ori_points
                     max_y = max(ori_points[:,0,1])
                     #Vamos a tratar de que el cartel quede cuadrado en la transformación
-                    # Me fijo si lo agrando de ancho o de alto
+                    # Me fijo si lo agrando de width o de height
                     difx = max_x - min_x
                     dify = max_y - min_y
                     plusx=0
@@ -191,10 +191,10 @@ class image_processor:
         approx = cv2.minAreaRect(contours[0])
         angle = approx[2]
         if abs(angle)%45 == 0:
-            alto, ancho = thresh.shape[0], thresh.shape[1]
-            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angle, 1)
-            thresh_rot = cv2.warpAffine(thresh, M, (ancho, alto))
-            imagen_rot = cv2.warpAffine(self.img, M, (ancho, alto))
+            height, width = thresh.shape[0], thresh.shape[1]
+            M = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
+            thresh_rot = cv2.warpAffine(thresh, M, (width, height))
+            image_rot = cv2.warpAffine(self.img, M, (width, height))
             contours, _ = cv2.findContours(thresh_rot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             if len(contours) == 0:
                 return None
@@ -204,9 +204,9 @@ class image_processor:
             half_width = int(approx[1][0] / 2)
             half_height = int(approx[1][1] / 2)
 
-            if y - half_height < 0 or y + half_height > imagen_rot.shape[0] or x - half_width < 0 or x + half_width > imagen_rot.shape[1]:
+            if y - half_height < 0 or y + half_height > image_rot.shape[0] or x - half_width < 0 or x + half_width > image_rot.shape[1]:
                 return None
-            rect = imagen_rot[y - half_height:y + half_height, x - half_width:x + half_width]
+            rect = image_rot[y - half_height:y + half_height, x - half_width:x + half_width]
             return rect, True
         return None
     
@@ -214,24 +214,24 @@ class image_processor:
         self.exit = None
         grey = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(grey, 120, 255, cv2.THRESH_BINARY)
-        contornos, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        if len(contornos) == 0:
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if len(contours) == 0:
             return None
         
-        area=cv2.contourArea(contornos[0])
+        area=cv2.contourArea(contours[0])
         # print("Area: ", area)
         if area< 100:
             return None
         
-        approx = cv2.minAreaRect(contornos[0])
+        approx = cv2.minAreaRect(contours[0])
         angle = approx[2]
         if abs(angle) == 45:
-            alto, ancho = thresh.shape[0], thresh.shape[1]
-            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angle, 1)
-            thresh_rot = cv2.warpAffine(thresh, M, (ancho, alto))
-            imagen_rot = cv2.warpAffine(self.img, M, (ancho, alto))
-            contornos, _ = cv2.findContours(thresh_rot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            if len(contornos) == 0:
+            height, width = thresh.shape[0], thresh.shape[1]
+            M = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
+            thresh_rot = cv2.warpAffine(thresh, M, (width, height))
+            image_rot = cv2.warpAffine(self.img, M, (width, height))
+            contours, _ = cv2.findContours(thresh_rot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            if len(contours) == 0:
                 return None
             
             x = int(approx[0][0])
@@ -243,9 +243,9 @@ class image_processor:
             half_width = int(approx[1][0] / 2)
             half_height = int(approx[1][1] / 2)
             
-            if y - half_height < 0 or y + half_height > imagen_rot.shape[0] or x - half_width < 0 or x + half_width > imagen_rot.shape[1]:
+            if y - half_height < 0 or y + half_height > image_rot.shape[0] or x - half_width < 0 or x + half_width > image_rot.shape[1]:
                 return None
-            rect = imagen_rot[y - half_height:y + half_height, x - half_width:x + half_width]
+            rect = image_rot[y - half_height:y + half_height, x - half_width:x + half_width]
             
             size = rect.shape[0] * rect.shape[1]
             if size == 0: return None
