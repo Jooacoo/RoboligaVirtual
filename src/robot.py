@@ -508,12 +508,12 @@ class Robot:
     
     def obtener_orientacion(self, radianes):
         # TODO(Richo): Este código asume que no nos movemos en diagonal
-        angulo = self.normalizar_radianes(radianes)
-        if angulo >= 0.785 and angulo <= 2.355:
+        angle = self.normalizar_radianes(radianes)
+        if angle >= 0.785 and angle <= 2.355:
             return 'W'
-        elif angulo >= -2.355 and angulo <= -0.785:
+        elif angle >= -2.355 and angle <= -0.785:
             return 'E'
-        elif angulo >= -0.785 and angulo <= 0.785:
+        elif angle >= -0.785 and angle <= 0.785:
             return 'N'
         else:
             return 'S'

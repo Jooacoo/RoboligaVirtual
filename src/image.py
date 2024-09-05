@@ -61,20 +61,20 @@ class image_processor:
                 # get the convex hull
                 hull = cv2.convexHull(contours[0])
                 # get the corners
-                oriPoints = cv2.approxPolyDP(hull, 0.01*cv2.arcLength(hull, True), True)
-                if(len(oriPoints) != 4):
+                ori_points = cv2.approxPolyDP(hull, 0.01*cv2.arcLength(hull, True), True)
+                if(len(ori_points) != 4):
                     # print("No es un cuadrado")
                     return self.exit
 
                 else:
-                    # get the min value of x in oriPoints
-                    min_x = min(oriPoints[:,0,0])
-                    # get the max value of x in oriPoints
-                    max_x = max(oriPoints[:,0,0])
-                    # get the min value of y in oriPoints
-                    min_y = min(oriPoints[:,0,1])
-                    # get the max value of y in oriPoints
-                    max_y = max(oriPoints[:,0,1])
+                    # get the min value of x in ori_points
+                    min_x = min(ori_points[:,0,0])
+                    # get the max value of x in ori_points
+                    max_x = max(ori_points[:,0,0])
+                    # get the min value of y in ori_points
+                    min_y = min(ori_points[:,0,1])
+                    # get the max value of y in ori_points
+                    max_y = max(ori_points[:,0,1])
                     #Vamos a tratar de que el cartel quede cuadrado en la transformación
                     # Me fijo si lo agrando de ancho o de alto
                     difx = max_x - min_x
@@ -89,16 +89,16 @@ class image_processor:
 
                     dstPoints = np.array([[min_x-plusx, min_y-plusy], [max_x+plusx, min_y-plusy], [max_x+plusx, max_y+plusy], [min_x-plusx, max_y+plusy]], dtype=np.float32)
 
-                    oriPoints = oriPoints.reshape(4, 2)
-                    oriPoints = oriPoints.astype(np.float32)
+                    ori_points = ori_points.reshape(4, 2)
+                    ori_points = ori_points.astype(np.float32)
 
-                    oriPoints= utils.sortCw(oriPoints)
+                    ori_points= utils.sortCw(ori_points)
                     dstPoints= utils.sortCw(dstPoints)
                     
-                    minXPoint = oriPoints[0]
-                    maxXPoint = oriPoints[1]
+                    minXPoint = ori_points[0]
+                    maxXPoint = ori_points[1]
                     # print("Llegué a calcular los puntos")
-                    M = cv2.getPerspectiveTransform(oriPoints, dstPoints)
+                    M = cv2.getPerspectiveTransform(ori_points, dstPoints)
                     thresh = cv2.warpPerspective(thresh, M, (64, 64))
                     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -114,8 +114,8 @@ class image_processor:
             if len(contours) == 1 and len(contours[0]) <=40:    
                 
                 approx = cv2.minAreaRect(contours[0])
-                angulo = approx[2]
-                if angulo % 90 == 0:
+                angle = approx[2]
+                if angle % 90 == 0:
                     # print("Encontré un cartel que parece una letra")
                     x = int(approx[0][0])
                     y = int(approx[0][1])                
@@ -189,10 +189,10 @@ class image_processor:
         
             
         approx = cv2.minAreaRect(contours[0])
-        angulo = approx[2]
-        if abs(angulo)%45 == 0:
+        angle = approx[2]
+        if abs(angle)%45 == 0:
             alto, ancho = thresh.shape[0], thresh.shape[1]
-            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angulo, 1)
+            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angle, 1)
             thresh_rot = cv2.warpAffine(thresh, M, (ancho, alto))
             imagen_rot = cv2.warpAffine(self.img, M, (ancho, alto))
             contours, _ = cv2.findContours(thresh_rot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -224,10 +224,10 @@ class image_processor:
             return None
         
         approx = cv2.minAreaRect(contornos[0])
-        angulo = approx[2]
-        if abs(angulo) == 45:
+        angle = approx[2]
+        if abs(angle) == 45:
             alto, ancho = thresh.shape[0], thresh.shape[1]
-            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angulo, 1)
+            M = cv2.getRotationMatrix2D((ancho / 2, alto / 2), angle, 1)
             thresh_rot = cv2.warpAffine(thresh, M, (ancho, alto))
             imagen_rot = cv2.warpAffine(self.img, M, (ancho, alto))
             contornos, _ = cv2.findContours(thresh_rot, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
