@@ -29,9 +29,9 @@ class image_processor:
 #
 #        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
     
-    def devolver_letra_victimas(self):
-        self.exit = None
-        recorte=0 # Este recorte lo vamos a utilizar cuando realizamos una transformación del cartel deformado
+#    def devolver_letra_victimas(self):
+#        self.exit = None
+#        recorte=0 # Este recorte lo vamos a utilizar cuando realizamos una transformación del cartel deformado
         # para sacarle algunos bordes negritos que nos quedan
 
         
