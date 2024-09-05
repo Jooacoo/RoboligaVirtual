@@ -81,7 +81,7 @@ class image_processor:
                     dify = max_y - min_y
                     plusx=0
                     plusy=0
-                    # calculo la mitad de lo que tengo que estirarlo, así lo corro un poquito menos en el mínimo y un poquito mas en máximo
+                    # calculo la half de lo que tengo que estirarlo, así lo corro un poquito menos en el mínimo y un poquito mas en máximo
                     if difx > dify:
                         plusy = (difx - dify) / 2
                     else:
@@ -310,9 +310,9 @@ class image_processor:
     
     def see_hole(self, img):
         grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        mitad = grey[43:, :]
-        size = mitad.shape[0] * mitad.shape[1]
-        black_pixels = np.count_nonzero(mitad < 31)
+        half = grey[43:, :]
+        size = half.shape[0] * half.shape[1]
+        black_pixels = np.count_nonzero(half < 31)
         black_percentaje = black_pixels / size
         black_Hole = False
         if black_percentaje >=0.85 and black_percentaje <= 0.97:

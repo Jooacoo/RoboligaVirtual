@@ -205,7 +205,7 @@ class Robot:
                         tileToTag=self.map.getTileAtPosition(Point(self.position.x-0.02, self.position.y))
 
                 # para saber si es la pared interna vertical de arriba o de abajo, voy a fijarme si estoy más arriba o más
-                # abajo de la mitad de la baldosa
+                # abajo de la half de la baldosa
                 yTtoTag=self.map.gridToPosition(tileToTag.col, tileToTag.row).y
                 if yRobot<yTtoTag:
                     tileToTag.tokensVerticalInternalWall[0]=token
@@ -250,7 +250,7 @@ class Robot:
                         tileToTag=self.map.getTileAtPosition(Point(self.position.x, self.position.y-0.02))
 
                 # para saber si es la pared interna horizontal de izq o derecha, voy a fijarme si estoy más izq
-                # o derecha de la mitad de la baldosa
+                # o derecha de la half de la baldosa
                 xTtoTag=self.map.gridToPosition(tileToTag.col, tileToTag.row).x
                 if xRobot<xTtoTag:
                     tileToTag.tokensHorizontalInternalWall[0]=token
