@@ -46,7 +46,7 @@ class Lidar:
         dist = self.rangeImage[lidar_idx[orient]]
         return dist >= 0.08
     
-    def isOpenSouth(self, orient):
+    def is_open_south(self, orient):
         lidar_idx = {'S': 256,
                      'E': 384,
                      'N': 0,

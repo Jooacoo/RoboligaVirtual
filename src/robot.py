@@ -524,7 +524,7 @@ class Robot:
 
     def isOpenSouth(self):
         orient = self.obtener_orientacion(self.rotation)
-        return self.lidar.isOpenSouth(orient)
+        return self.lidar.is_open_south(orient)
         
     def isOpenWest(self):
         orient = self.obtener_orientacion(self.rotation)
