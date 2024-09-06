@@ -29,9 +29,9 @@ class image_processor:
 #
 #        return contours if len(contours) == 1 and len(contours[0]) <= 10 else None
     
-#    def devolver_letra_victims(self):
-#        self.exit = None
-#        crop=0 # Este crop lo vamos a utilizar cuando realizamos una transformación del sign deformado
+    def devolver_letra_victims(self):
+        self.exit = None
+        crop=0 # Este crop lo vamos a utilizar cuando realizamos una transformación del sign deformado
         # para sacarle algunos bordes negritos que nos quedan
 
         
