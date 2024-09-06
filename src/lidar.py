@@ -37,7 +37,7 @@ class Lidar:
     def update(self):
         self.rangeImage = self.lidar.getRangeImage()[1024:1536]
 
-    def isOpenNorth(self, orient):
+    def is_open_north(self, orient):
         lidar_idx = {'N': 256,
                      'W': 384,
                      'S': 0,
